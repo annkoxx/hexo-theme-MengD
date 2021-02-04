@@ -21,4 +21,11 @@ hexo.on('generateBefore', function () {
   /* 资源压缩 */
   config.minify=theme.minify;
 })
-
+/* 清除页面注释 */
+hexo.extend.filter.register('after_render:html', function(str, data){
+  var result = str.replace(/<!--(.*?)-->/g,"");
+  result = result.replace(/("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n))|(\/\*(\n|.)*?\*\/)/g,function(word) { 
+    return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word;
+  });
+  return result;
+});
